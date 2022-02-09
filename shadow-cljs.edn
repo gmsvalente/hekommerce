@@ -1,4 +1,4 @@
-{:deps {:aliases [:shadow]}
+{:deps true
 
  :nrepl {:middleware [refactor-nrepl.middleware/wrap-refactor]}
 
@@ -6,4 +6,4 @@
  {:hekommerce {:target :browser
                :output-dir "public/js"
                :asset-path "public/js"
-               :modules {:main {:init-fn hekommerce.frontend.core/init}}}}}
+               :modules {:main {:init-fn hekommerce.frontend.render/init}}}}}

@@ -12,7 +12,7 @@
         arttuka/reagent-material-ui {:mvn/version "5.2.4-0"}}
 
  :aliases
- {:run {:main-opts ["-m" "hekommerce.backend.core"]}
+ {:run-server {:main-opts ["-m" "hekommerce.backend.server"]}
   :build {:deps {io.github.clojure/tools.build {:git/tag "v0.7.5"
                                                 :git/sha "34727f7"}}
           :ns-default build}
