@@ -1,0 +1,10 @@
+.backups~/
+.cpcache/
+.nrepl-port
+.shadow-cljs/
+
+workflow+todo.org
+
+node_modules/
+public/js/cljs-runtime/
+target/
