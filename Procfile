@@ -1,1 +1,1 @@
-web: clojure -M:run-server
+web: clojure -M:run-server $PORT
