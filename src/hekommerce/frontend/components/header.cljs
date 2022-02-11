@@ -10,7 +10,9 @@
             [hekommerce.frontend.subs :as rfs]))
 
 (defn custom-style [theme]
-  {".header" {:justify-content "space-between"}
+  {".bar" {:position "relative"
+           :z-index 1}
+   ".header" {:justify-content "space-between"}
    ".header-title" {:font-family "Orbitron"
                     :font-size 30
                     "@media screen and (max-width: 600px)"
@@ -18,7 +20,7 @@
 
 (defn header* [{:keys [class-name]}]
   [:div {:class class-name}
-   [app-bar
+   [app-bar {:class "bar"}
     [toolbar {:class "header"}
      [typography {:class "header-title"} "HEKOMMERCE"]
      [:div {:class "button-box"}

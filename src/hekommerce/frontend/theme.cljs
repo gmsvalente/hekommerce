@@ -6,8 +6,8 @@
             [re-frame.core :as rf]))
 
 (def custom-theme
-  {:palette {:primary colors/orange
-             :secondary colors/blue
+  {:palette {:primary colors/red
+             :secondary colors/amber
              :mode "light"}
    :typography {:font-family "Orbitron"}})
 
