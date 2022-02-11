@@ -4,18 +4,27 @@
             [reagent-mui.material.toolbar :refer [toolbar]]
             [reagent-mui.material.typography :refer [typography]]
             [reagent-mui.icons.menu :refer [menu]]
-            [reagent-mui.material.icon-button :refer [icon-button]]))
+            [reagent-mui.material.icon-button :refer [icon-button]]
+            [re-frame.core :as rf]
+            [hekommerce.frontend.events :as rfe]
+            [hekommerce.frontend.subs :as rfs]))
 
 (defn custom-style [theme]
   {".header" {:justify-content "space-between"}
-   ".header-title" {:font-family "Orbitron"}})
+   ".header-title" {:font-family "Orbitron"
+                    :font-size 30
+                    "@media screen and (max-width: 600px)"
+                    {:font-size 24}}})
 
 (defn header* [{:keys [class-name]}]
   [:div {:class class-name}
    [app-bar
     [toolbar {:class "header"}
-     [typography {:class "header-title"}"HEKOMMERCE"]
-     [icon-button [menu]]]]])
+     [typography {:class "header-title"} "HEKOMMERCE"]
+     [:div {:class "button-box"}
+      [icon-button {:on-click #(rf/dispatch [::rfe/toggle-theme-mode])}
+       [@(rf/subscribe [::rfs/theme-mode-btn-icon])]]
+      [icon-button [menu]]]]]])
 
 (def header (styled header* custom-style))
 

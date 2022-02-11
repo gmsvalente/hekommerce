@@ -28,7 +28,10 @@
      ["/public/*" (ring/create-file-handler)]])
    (ring/create-default-handler)))
 
+(def server (atom nil))
+
 (defn -main [port]
-  (jetty/run-jetty #'routes {:port (Integer/parseInt (or port "8080"))
-                             :join? (or (:join-server env) false)}))
+  (reset! server
+          (jetty/run-jetty #'routes {:port (Integer/parseInt (or port "8080"))
+                                     :join? (or (:join-server env) false)})))
 
