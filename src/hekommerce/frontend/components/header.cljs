@@ -11,13 +11,16 @@
 
 (defn custom-style [theme]
   {".header" {:justify-content "space-between"}
-   ".header-title" {:font-family "Orbitron"}})
+   ".header-title" {:font-family "Orbitron"
+                    :font-size 30
+                    "@media screen and (max-width: 600px)"
+                    {:font-size 24}}})
 
 (defn header* [{:keys [class-name]}]
   [:div {:class class-name}
    [app-bar
     [toolbar {:class "header"}
-     [typography {:class "header-title"}"HEKOMMERCE"]
+     [typography {:class "header-title"} "HEKOMMERCE"]
      [:div {:class "button-box"}
       [icon-button {:on-click #(rf/dispatch [::rfe/toggle-theme-mode])}
        [@(rf/subscribe [::rfs/theme-mode-btn-icon])]]
