@@ -2,28 +2,12 @@
   (:require #?(:clj [clojure.spec.alpha :as spec]
                :cljs [cljs.spec.alpha :as spec])))
 
-
 ;;; contact
 (spec/def :contact/email string?)
 (spec/def :contact/phone string?)
 
 (spec/def ::contact (spec/keys :req [:contact/email]
                                :opt [:contact/phone]))
-
-;;; user
-(spec/def :user/name string?)
-(spec/def :user/id uuid?)
-(spec/def :user/contact ::contact)
-
-(spec/def ::user (spec/keys :req [:user/name :user/id]
-                            :opt [:user/contact]))
-;;; company
-(spec/def :company/name string?)
-(spec/def :company/id int?)
-(spec/def :company/contact ::contact)
-(spec/def ::company (spec/keys :req [:company/name
-                                     :company/name]
-                               :opt [:company/contact]))
 
 ;;; category
 (spec/def :category/name string?)
@@ -46,6 +30,19 @@
                                :opt [:product/image]))
 
 
+;;; user
+(spec/def :user/name string?)
+(spec/def :user/id uuid?)
+(spec/def :user/contact ::contact)
+(spec/def :user/products (spec/coll-of ::product))
 
-
+(spec/def ::user (spec/keys :req [:user/name :user/id]
+                            :opt [:user/contact]))
+;;; company
+(spec/def :company/name string?)
+(spec/def :company/id int?)
+(spec/def :company/contact ::contact)
+(spec/def ::company (spec/keys :req [:company/name
+                                     :company/name]
+                               :opt [:company/contact]))
 
