@@ -5,11 +5,13 @@
             [hekommerce.frontend.events :as rfe]
             [hekommerce.frontend.theme :refer [with-theme]]
             [hekommerce.frontend.components.header :refer [header]]
-            [hekommerce.frontend.components.cart :refer [cart-button]]))
+            [hekommerce.frontend.components.cart :refer [cart-button]]
+            [hekommerce.frontend.components.drawer :refer [drawer-menu]]))
 
 (defn root []
   [with-theme
    [header]
+   [drawer-menu]
    [cart-button]])
 
 (defn ^:dev/after-load mount-root []

@@ -26,7 +26,8 @@
      [:div {:class "button-box"}
       [icon-button {:on-click #(rf/dispatch [::rfe/toggle-theme-mode])}
        [@(rf/subscribe [::rfs/theme-mode-btn-icon])]]
-      [icon-button [menu]]]]]])
+      [icon-button {:on-click #(rf/dispatch [::rfe/toggle-menu])}
+       [menu]]]]]])
 
 (def header (styled header* custom-style))
 

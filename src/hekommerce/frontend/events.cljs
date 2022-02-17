@@ -6,7 +6,8 @@
 (rf/reg-event-db
  ::init-db
  (fn [_]
-   {:theme custom-theme}))
+   {:theme custom-theme
+    :menu {:is-open? false}}))
 
 (defn change-mode [mode]
   (condp = mode
@@ -17,3 +18,8 @@
  ::toggle-theme-mode
  (fn [cofx _]
    {:db (update-in (:db cofx) [:theme :palette :mode] change-mode )}))
+
+(rf/reg-event-fx
+ ::toggle-menu
+ (fn [{:keys [db]} _]
+   {:db (update-in db [:menu :is-open?] not)}))

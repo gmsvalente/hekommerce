@@ -23,3 +23,7 @@
      "dark" light-mode
      'oops)))
 
+(rf/reg-sub
+ ::menu-open?
+ (fn [db]
+   (-> db :menu :is-open?)))
