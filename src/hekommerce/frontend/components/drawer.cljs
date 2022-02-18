@@ -10,23 +10,24 @@
 
 (defn custom-style [theme])
 
-(defn drawer-components [{:keys [class-name]}]
-  [box {:sx {:display "flex"
-               :flex-direction "column"
-               :justify-content "center"
-               :align-items "center"
-               :width 340
-               "@media screen and (max-width:600px)"
-               {:width 280}}}
-   [login]
-   [menu]])
+(defn drawer-components* [{:keys [class-name]}]
+  [:div {:class class-name}
+   [:<>
+    [login]
+    [menu]]])
+
+(def drawer-components (styled drawer-components* custom-style))
 
 (defn drawer* [{:keys [class-name]}]
   [:div {:class class-name}
    [drawer {:anchor "right"
             :open @(rf/subscribe [::rfs/menu-open?])
             :on-close #(rf/dispatch [::rfe/toggle-menu])}
-    [drawer-components]]])
+   [box {:sx {:width 340
+              "@media screen and (max-width:600px)"
+              {:width 280}}}
+    [drawer-components*]]]])
+
 
 (def drawer-menu (styled drawer* custom-style))
 
