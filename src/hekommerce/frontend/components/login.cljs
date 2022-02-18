@@ -1,10 +1,13 @@
 (ns hekommerce.frontend.components.login
-  (:require [reagent-mui.styles :refer [styled]]
+  (:require [reagent.core :as r]
+            [reagent-mui.styles :refer [styled]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.typography :refer [typography]]
             [reagent-mui.material.divider :refer [divider]]
             [reagent-mui.material.button :refer [button]]
-            [reagent-mui.material.text-field :refer [text-field]]))
+            [reagent-mui.material.text-field :refer [text-field]]
+            [cljs.spec.alpha :as s]
+            [hekommerce.common.spec :as model]))
 
 
 (defn custom-styles [theme]
@@ -17,26 +20,34 @@
                  :flex-direction "column"
                  :justify-content "space-between"
                  :align-items "center"
-                 :height "100px"}
+                 :height "130px"}
    ".login-input" {}
    ".login-button" {:justify-content "center"
                     :width "40%"}})
 
 
 (defn login* [{:keys [class-name]}]
-  [box {:class class-name
-        :sx {:margin "12px 8px auto"
-             :padding "4px"}}
-   [typography {:class "box-title"} "Login"]
-   [divider {:variant "middle"}]
-   [:div {:class "login-box"}
-    [text-field {:class "login-input"
-                 :id "user-login"
-                 :label "User Name"
-                 :variant "outlined"
-                 :onChange #(js/console.log (.. % -target -value))}]
-    [button {:variant "contained"
+  (let [login-entry (r/atom "")
+        login-ok? #(s/valid? ::model/login @login-entry)
+        helper-fn  #(if (or (empty? @login-entry)
+                            (login-ok?))
+                      false
+                      "Wrong login format!")]
+    (fn []
+      [box {:class class-name
+            :sx {:margin "12px 8px auto"
+                 :padding "4px"}}
+       [typography {:class "box-title"} "Login"]
+       [divider {:variant "middle"}]
+       [:div {:class "login-box"}
+        [text-field {:class "login-input"
+                     :id "user-login"
+                     :label "User Name"
+                     :variant "outlined"
+                     :onChange #(reset! login-entry (.. % -target -value))
+                     :helperText (helper-fn)}]
+        [button {:variant "contained"
 
-             :class "login-button"} "Login"]]])
+                 :class "login-button"} "Login"]]])))
 
 (def login (styled login* custom-styles))

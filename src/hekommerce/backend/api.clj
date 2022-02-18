@@ -11,8 +11,10 @@
     (reduce into [] users)))
 
 
-(comment 
 
+
+
+(comment 
   (xt/submit-tx node [[::xt/put {:xt/id 0
                                  :user 'joao}]
                       [::xt/put {:xt/id 1
