@@ -1,33 +1,32 @@
 (ns hekommerce.frontend.components.drawer
-  (:require [reagent-mui.styles :refer [styled]]
+  (:require [re-frame.core :as rf]
+            [reagent-mui.styles :refer [styled]]
             [reagent-mui.material.drawer :refer [drawer]]
-            [reagent-mui.material.box :refer [box]]
-            [re-frame.core :as rf]
             [hekommerce.frontend.subs :as rfs]
             [hekommerce.frontend.events :as rfe]
             [hekommerce.frontend.components.login :refer [login]]
             [hekommerce.frontend.components.menu :refer [menu]]))
 
-(defn custom-style [theme])
+(defn custom-style [theme]
+  {".drawer-components" {:display "flex"
+                         :flex-direction "column"
+                         :height "100vh"
+                         :width 340
+                         "@media screen and (max-width:600px)"
+                         {:width 280}}})
 
-(defn drawer-components* [{:keys [class-name]}]
-  [:div {:class class-name}
-   [:<>
-    [login]
-    [menu]]])
+(defn drawer-components []
+  [:div {:class "drawer-components"}
+   [login]
+   [menu]])
 
-(def drawer-components (styled drawer-components* custom-style))
 
 (defn drawer* [{:keys [class-name]}]
-  [:div {:class class-name}
-   [drawer {:anchor "right"
-            :open @(rf/subscribe [::rfs/menu-open?])
-            :on-close #(rf/dispatch [::rfe/toggle-menu])}
-   [box {:sx {:width 340
-              "@media screen and (max-width:600px)"
-              {:width 280}}}
-    [drawer-components*]]]])
-
+  [drawer {:anchor "right"
+           :open @(rf/subscribe [::rfs/drawer-open?])
+           :on-close #(rf/dispatch [::rfe/toggle-drawer])}
+   [:div {:class class-name}
+    [drawer-components]]])
 
 (def drawer-menu (styled drawer* custom-style))
 

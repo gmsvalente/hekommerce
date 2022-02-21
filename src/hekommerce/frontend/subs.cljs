@@ -3,6 +3,7 @@
             [reagent-mui.icons.dark-mode :refer [dark-mode]]
             [reagent-mui.icons.light-mode :refer [light-mode]]))
 
+;;; theme
 (rf/reg-sub
  ::get-theme
  (fn [db]
@@ -23,7 +24,24 @@
      "dark" light-mode
      'oops)))
 
+;;; drawer
 (rf/reg-sub
- ::menu-open?
+ ::drawer-open?
  (fn [db]
-   (-> db :menu :is-open?)))
+   (-> db :drawer :is-open?)))
+
+;;; login
+(rf/reg-sub
+ ::loading-user?
+ (fn [db]
+   (-> db :user :login :loading?)))
+
+(rf/reg-sub
+ ::login-slide-on?
+ (fn [db]
+   (-> db :user :login :slide-on?)))
+
+(rf/reg-sub
+ ::logged-in-slide-on?
+ (fn [db]
+   (-> db :user :logged-in :slide-on?)))

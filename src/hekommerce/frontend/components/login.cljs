@@ -1,53 +1,82 @@
 (ns hekommerce.frontend.components.login
-  (:require [reagent.core :as r]
+    (:require [reagent.core :as r]
             [reagent-mui.styles :refer [styled]]
             [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.typography :refer [typography]]
             [reagent-mui.material.divider :refer [divider]]
-            [reagent-mui.material.button :refer [button]]
+            [reagent-mui.lab.loading-button :refer [loading-button]]
             [reagent-mui.material.text-field :refer [text-field]]
+            [reagent-mui.material.slide :refer [slide]]
             [cljs.spec.alpha :as s]
-            [hekommerce.common.spec :as model]))
-
+            [hekommerce.common.spec :as model]
+            [hekommerce.frontend.events :as rfe]
+            [re-frame.core :as rf]
+            [hekommerce.frontend.subs :as rfs]))
 
 (defn custom-styles [theme]
-  {".box-title" {:font-family "Orbitron"
+  {".login-container" {:position "relative"
+                       :height "185px"}
+   ".login-slide" {:position "absolute"
+                   :overflow "hidden"
+                   :left "10%"
+                   :right "10%"}
+   ".user-slide"  {:position "absolute"
+                   :overflow "hidden"
+                   :left "15%"
+                   :right "15%"}
+   ".login-box" {:margin "15px"
+                 :height "105px"
                  :display "flex"
-                 :justify-content "center"}
-   ".login-box" {:display "flex"
-                 :color "black"
-                 :margin-top "12px"
                  :flex-direction "column"
                  :justify-content "space-between"
-                 :align-items "center"
-                 :height "130px"}
-   ".login-input" {}
-   ".login-button" {:justify-content "center"
-                    :width "40%"}})
+                 :align-items "center"}
+   ".user-box" {}})
 
+(defn login-box []
+  (let [login-user (r/atom "")
+        login-ok? #(s/valid? ::model/login @login-user)
+        helper-fn  #(when-not (or (empty? @login-user)
+                                  (login-ok?))
+                      "Wrong login format!")
+        loading? (rf/subscribe [::rfs/loading-user?])]
+    (fn []
+      [:div {:class "login-slide"}
+       [slide {:direction "right"
+               :in @(rf/subscribe [::rfs/login-slide-on?])}
+        [:div {:class "login-box"}
+         [text-field {:size "small"
+                      :id "user-login"
+                      :label "User Name"
+                      :variant "outlined"
+                      :on-change #(reset! login-user (.. % -target -value))
+                      :helperText (helper-fn)}]
+         [loading-button {:variant "contained"
+                          :loading @loading?
+                          :on-click #(when (login-ok?)
+                                       (rf/dispatch [::rfe/set-user @login-user]))}
+          [typography {:style {:font-family "Orbitron"}} "Login"]]]]])))
+
+
+
+
+(defn user-box []
+  (fn []
+    [:div {:class "user-slide"}
+     [slide {
+             :direction "left"
+             :in @(rf/subscribe [::rfs/logged-in-slide-on?])}
+      [:div {:class "user-box"}
+       "user-slide"]]]))
+
+(defn login-container [& children]
+  (into [:div {:class "login-container"}] children))
 
 (defn login* [{:keys [class-name]}]
-  (let [login-entry (r/atom "")
-        login-ok? #(s/valid? ::model/login @login-entry)
-        helper-fn  #(if (or (empty? @login-entry)
-                            (login-ok?))
-                      false
-                      "Wrong login format!")]
-    (fn []
-      [box {:class class-name
-            :sx {:margin "12px 8px auto"
-                 :padding "4px"}}
-       [typography {:class "box-title"} "Login"]
-       [divider {:variant "middle"}]
-       [:div {:class "login-box"}
-        [text-field {:class "login-input"
-                     :id "user-login"
-                     :label "User Name"
-                     :variant "outlined"
-                     :onChange #(reset! login-entry (.. % -target -value))
-                     :helperText (helper-fn)}]
-        [button {:variant "contained"
-
-                 :class "login-button"} "Login"]]])))
+  [:div {:class class-name}
+   [login-container
+    [divider {:style {:margin "7px 4px auto"}}
+     [typography {:style {:font-family "Orbitron"}} "USER"]]
+    [login-box]
+    [user-box]]])
 
 (def login (styled login* custom-styles))

@@ -22,10 +22,17 @@
             :middleware [muuntaja/format-negotiate-middleware
                          muuntaja/format-response-middleware
                          exception/exception-middleware
+                         muuntaja/format-request-middleware
                          coercion/coerce-response-middleware
                          coercion/coerce-request-middleware]}})
    (ring/routes
-    (ring/create-default-handler))))
+    (ring/create-default-handler
+     {:not-found (fn [_]
+                   {:status 404
+                    :body "Sorry!! 404"})
+      :method-not-allowed (fn [_]
+                            {:status 405
+                             :body "Method not allowed!! 405"})}))))
 
 (defonce server (atom nil))
 

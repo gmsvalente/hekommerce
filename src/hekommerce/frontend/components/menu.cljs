@@ -1,14 +1,8 @@
 (ns hekommerce.frontend.components.menu
-  (:require [reagent-mui.styles :refer [styled]]
-            [re-frame.core :as rf]
-            [hekommerce.frontend.subs :as rfs]
-            [hekommerce.frontend.events :as rfe]))
+  (:require [reagent-mui.material.divider :refer [divider]]
+            [reagent-mui.material.typography :refer [typography]]))
 
-(defn custom-style [theme]
-)
-
-(defn menu* [{:keys [class-name]}]
-  [:div {:class class-name}])
-
-(def menu (styled menu* custom-style))
-
+(defn menu []
+  [:div {:style {:position "relative"}}
+   [divider {:style {:margin "7px 4px auto"}}
+    [typography {:style {:font-family "Orbitron"}} "MENU"]]])

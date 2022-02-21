@@ -2,7 +2,7 @@
   (:require [hiccup.page :as hp ]))
 
 (defn land-page []
-  (hp/html5
+  (hp/html5 {:style "padding: 0px; margin: 0px;"}
    [:head
     [:meta {:name "viewport" :content "width=device-width, initial-scale=1.0"}]
     [:meta {:charset "utf8"}]

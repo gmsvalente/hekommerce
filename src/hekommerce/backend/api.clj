@@ -11,7 +11,27 @@
     (reduce into [] users)))
 
 
+(defn get-user [user]
+  (let [db (xt/db node)]
+    (def u user)
+    (xt/q db '{:find [(pull login [*])]
+               :where [[login :user/login user]]
+               :in [user]}
+          user)))
 
+(defn post-user [user]
+  (let [tx-id (:user/login user)
+        content (merge {:xt/id tx-id} user)
+        response
+        (try
+          (xt/submit-tx node [[::xt/put content]])
+          (catch xtdb.IllegalArgumentException xe
+            {:error (.. xe getMessage)
+             :tx-id tx-id
+             :content content}))]
+    (if (:error response)
+      response
+      content)))
 
 
 (comment 
