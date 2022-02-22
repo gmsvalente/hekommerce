@@ -105,7 +105,9 @@
 (rf/reg-event-fx
  ::success-login
  (fn [{:keys [db]} [_ {:keys [user]}]]
-   {:db (assoc-in db [:user :data] user)
+   {:db (-> db
+            (assoc-in [:user :data] user)
+            (assoc-in [:user :is-logged?] true))
     :fx [[:dispatch [::toggle-login-loading]]
          [:dispatch [::toggle-login-slide]]]}))
 
