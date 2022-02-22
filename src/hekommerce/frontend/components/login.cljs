@@ -23,7 +23,8 @@
    ".user-slide"  {:position "absolute"
                    :overflow "hidden"
                    :left "15%"
-                   :right "15%"}
+                   :right "15%"
+                   :z-index -1}
    ".login-box" {:margin "15px"
                  :height "105px"
                  :display "flex"
@@ -59,15 +60,15 @@
 
 (defn user-box []
   (fn []
-    [:div {:class "user-slide"}
-     [slide {
-             :direction "left"
-             :in (not @(rf/subscribe [::rfs/login-form-slide]))}
-      (let [{:keys [user/name user/login user/id]} @(rf/subscribe [::rfs/user-data])]
+    (let [{:keys [user/name user/login user/id]} @(rf/subscribe [::rfs/user-data])]
+      [:div {:class "user-slide"}
+       [slide {
+               :direction "left"
+               :in (not @(rf/subscribe [::rfs/login-form-slide]))}
         [:div {:class "user-box"}
          [typography (str "Name: " name)]
          [typography (str "Login: " login)]
-         [typography id]])]]))
+         [typography id]]]])))
 
 (defn login-container [& children]
   (into [:div {:class "login-container"}] children))
