@@ -42,7 +42,7 @@
     (fn []
       [:div {:class "login-slide"}
        [slide {:direction "right"
-               :in @(rf/subscribe [::rfs/login-slide-on?])}
+               :in @(rf/subscribe [::rfs/login-form-slide])}
         [:div {:class "login-box"}
          [text-field {:size "small"
                       :id "user-login"
@@ -53,10 +53,8 @@
          [loading-button {:variant "contained"
                           :loading @loading?
                           :on-click #(when (login-ok?)
-                                       (rf/dispatch [::rfe/set-user @login-user]))}
+                                       (rf/dispatch [::rfe/fetch-user @login-user]))}
           [typography {:style {:font-family "Orbitron"}} "Login"]]]]])))
-
-
 
 
 (defn user-box []
@@ -64,9 +62,12 @@
     [:div {:class "user-slide"}
      [slide {
              :direction "left"
-             :in @(rf/subscribe [::rfs/logged-in-slide-on?])}
-      [:div {:class "user-box"}
-       "user-slide"]]]))
+             :in (not @(rf/subscribe [::rfs/login-form-slide]))}
+      (let [{:keys [user/name user/login user/id]} @(rf/subscribe [::rfs/user-data])]
+        [:div {:class "user-box"}
+         [typography (str "Name: " name)]
+         [typography (str "Login: " login)]
+         [typography id]])]]))
 
 (defn login-container [& children]
   (into [:div {:class "login-container"}] children))

@@ -34,14 +34,16 @@
 (rf/reg-sub
  ::loading-user?
  (fn [db]
-   (-> db :user :login :loading?)))
+   (-> db :user :login-form :loading?)))
 
 (rf/reg-sub
- ::login-slide-on?
+ ::login-form-slide
  (fn [db]
-   (-> db :user :login :slide-on?)))
+   (-> db :user :login-form :slide)))
+
+;;; user-data
 
 (rf/reg-sub
- ::logged-in-slide-on?
+ ::user-data
  (fn [db]
-   (-> db :user :logged-in :slide-on?)))
+   (-> db :user :data)))
