@@ -34,12 +34,22 @@
 (rf/reg-sub
  ::loading-user?
  (fn [db]
-   (-> db :user :login-form :loading?)))
+   (-> db :login-form :loading?)))
 
 (rf/reg-sub
  ::login-form-slide
  (fn [db]
-   (-> db :user :login-form :slide)))
+   (-> db :login-form :slide)))
+
+(rf/reg-sub
+ ::trying-login
+ (fn [db]
+   (-> db :login-form :trying)))
+
+(rf/reg-sub
+ ::create-user-form-open?
+ (fn [db]
+   (-> db :dialogs :user-creation :open?)) )
 
 ;;; user-data
 
@@ -47,3 +57,16 @@
  ::user-data
  (fn [db]
    (-> db :user :data)))
+
+
+;;; dialogs
+
+(rf/reg-sub
+ ::user-subscribe-alert-open?
+ (fn [db]
+   (-> db :dialogs :user-subscribe-alert :open?)))
+
+(rf/reg-sub
+ ::user-subscribe-form-open?
+ (fn [db]
+   (-> db :dialogs :user-subscribe-form :open?)))

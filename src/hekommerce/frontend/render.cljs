@@ -1,22 +1,25 @@
 (ns hekommerce.frontend.render
   (:require [reagent.dom :refer [render]]
-            [goog.dom :refer [getElement]]
-            [re-frame.core :as rf]
+            [re-frame.core :refer [dispatch-sync]]
             [hekommerce.frontend.events :as rfe]
             [hekommerce.frontend.theme :refer [with-theme]]
             [hekommerce.frontend.components.header :refer [header]]
             [hekommerce.frontend.components.cart :refer [cart-button]]
-            [hekommerce.frontend.components.drawer :refer [drawer-menu]]))
+            [hekommerce.frontend.components.drawer :refer [drawer-menu]]
+            [hekommerce.frontend.components.dialogs :refer [user-subscribe-form-dialog user-subscribe-alert-dialog]]))
 
 (defn root []
   [with-theme
-   [header]
-   [drawer-menu]
-   [cart-button]])
+   [user-subscribe-form-dialog]
+   [user-subscribe-alert-dialog]
+   [:div
+    [header]
+    [drawer-menu]
+    [cart-button]]])
 
 (defn ^:dev/after-load mount-root []
-  (render root (getElement "root")))
+  (render root (.. js/document (getElementById "root"))))
 
 (defn init []
-  (rf/dispatch-sync [::rfe/init-db])
+  (dispatch-sync [::rfe/init-db])
   (mount-root))

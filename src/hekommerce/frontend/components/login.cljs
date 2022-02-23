@@ -1,16 +1,16 @@
 (ns hekommerce.frontend.components.login
-    (:require [reagent.core :as r]
+  (:require [re-frame.core :as rf]
+            [reagent.core :as r]
             [reagent-mui.styles :refer [styled]]
-            [reagent-mui.material.box :refer [box]]
             [reagent-mui.material.typography :refer [typography]]
             [reagent-mui.material.divider :refer [divider]]
             [reagent-mui.lab.loading-button :refer [loading-button]]
             [reagent-mui.material.text-field :refer [text-field]]
             [reagent-mui.material.slide :refer [slide]]
             [cljs.spec.alpha :as s]
+            [hekommerce.frontend.utils :refer [target-value]]
             [hekommerce.common.spec :as model]
             [hekommerce.frontend.events :as rfe]
-            [re-frame.core :as rf]
             [hekommerce.frontend.subs :as rfs]))
 
 (defn custom-styles [theme]
@@ -30,8 +30,7 @@
                  :display "flex"
                  :flex-direction "column"
                  :justify-content "space-between"
-                 :align-items "center"}
-   ".user-box" {}})
+                 :align-items "center"}})
 
 (defn login-box []
   (let [login-user (r/atom "")
@@ -39,36 +38,38 @@
         helper-fn  #(when-not (or (empty? @login-user)
                                   (login-ok?))
                       "Wrong login format!")
-        loading? (rf/subscribe [::rfs/loading-user?])]
+        loading? @(rf/subscribe [::rfs/loading-user?])
+        slide? (rf/subscribe [::rfs/login-form-slide])]
     (fn []
       [:div {:class "login-slide"}
        [slide {:direction "right"
-               :in @(rf/subscribe [::rfs/login-form-slide])}
+               :in @slide?}
         [:div {:class "login-box"}
          [text-field {:size "small"
                       :id "user-login"
                       :label "User Name"
                       :variant "outlined"
-                      :on-change #(reset! login-user (.. % -target -value))
+                      :value @login-user
+                      :on-change #(reset! login-user (target-value %))
                       :helperText (helper-fn)}]
          [loading-button {:variant "contained"
-                          :loading @loading?
+                          :loading loading?
                           :on-click #(when (login-ok?)
                                        (rf/dispatch [::rfe/fetch-user @login-user]))}
           [typography {:style {:font-family "Orbitron"}} "Login"]]]]])))
 
 
 (defn user-box []
+(let [{:keys [user/name user/login]} @(rf/subscribe [::rfs/user-data])
+      slide? (rf/subscribe [::rfs/login-form-slide])]
   (fn []
-    (let [{:keys [user/name user/login user/id]} @(rf/subscribe [::rfs/user-data])]
-      [:div {:class "user-slide"}
-       [slide {
-               :direction "left"
-               :in (not @(rf/subscribe [::rfs/login-form-slide]))}
-        [:div {:class "user-box"}
-         [typography (str "Name: " name)]
-         [typography (str "Login: " login)]
-         [typography id]]]])))
+    [:div {:class "user-slide"}
+     [slide {:direction "left"
+             :in (not @slide?)}
+      [:div {:class "user-box"}
+       [typography (str "Name: " name)]
+       [typography (str "Login: " login)]
+       [typography (str "Products:  products")]]]])))
 
 (defn login-container [& children]
   (into [:div {:class "login-container"}] children))
