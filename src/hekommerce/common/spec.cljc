@@ -53,9 +53,10 @@
 (spec/def :user/name string?)
 (spec/def :user/login ::login)
 (spec/def :user/id uuid?)
+(spec/def :user/email string?)
 (spec/def :user/contact ::contact)
 (spec/def :user/products (spec/coll-of ::product))
 
 (spec/def ::user (spec/keys :req [:user/name :user/login :user/id]
-                            :opt [:user/contact]))
+                            :opt [:user/email]))
 

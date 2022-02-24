@@ -130,3 +130,21 @@
    {:db (assoc-in db [:dialogs :user-subscribe-form :open?] state)
     :fx [[:dispatch [::open-user-subscribe-alert false]]]}))
 
+
+(rf/reg-event-fx
+ ::create-user
+ (fn [{:keys [db]} [_ data]]
+   {:fx [[:dispatch [::open-user-subscribe-form false]]
+         [:http-xhrio {:method :post
+                       :uri (str "http://192.168.0.21:8080/api/user")
+                       :params data
+                       :format (ajax/json-request-format )
+                       :response-format (ajax/json-response-format {:keywords? true})
+                       :on-success [::success-login]
+                       :on-failure [::post-error]}]]}))
+
+(rf/reg-event-fx
+ ::post-error
+ (fn [_ [_ data]]
+   (.. js/console (log data))
+   {:fx []}))

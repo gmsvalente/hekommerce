@@ -23,4 +23,4 @@
       {:status 500
        :body response}
       {:status 201
-       :body response})))
+       :body {:user response}})))

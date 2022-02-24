@@ -60,16 +60,17 @@
 
 
 (defn user-box []
-(let [{:keys [user/name user/login]} @(rf/subscribe [::rfs/user-data])
+(let [user  (rf/subscribe [::rfs/user-data])
       slide? (rf/subscribe [::rfs/login-form-slide])]
   (fn []
-    [:div {:class "user-slide"}
-     [slide {:direction "left"
-             :in (not @slide?)}
-      [:div {:class "user-box"}
-       [typography (str "Name: " name)]
-       [typography (str "Login: " login)]
-       [typography (str "Products:  products")]]]])))
+    (let [{:keys [user/name user/login]} @user]
+      [:div {:class "user-slide"}
+       [slide {:direction "left"
+               :in (not @slide?)}
+        [:div {:class "user-box"}
+         [typography (str "Name: " name)]
+         [typography (str "Login: " login)]
+         [typography (str "Products:  products")]]]]))))
 
 (defn login-container [& children]
   (into [:div {:class "login-container"}] children))

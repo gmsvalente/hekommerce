@@ -16,8 +16,7 @@
   (let [open? (rf/subscribe [::rfs/user-subscribe-form-open?])
         login (rf/subscribe [::rfs/trying-login])]
     (fn []
-      (let [
-            user (r/atom {:user/name "" :user/email ""})]
+      (let [user (r/atom {"user/name" "" "user/email" ""})]
         [:div 
          [dialog {:open @open? :on-close #(rf/dispatch [::rfe/open-user-subscribe-form false])}
           [dialog-title "Subscribe"]
@@ -35,19 +34,21 @@
                         :id "user-name"
                         :variant "outlined"
                         :label "User name"
-                        :on-change #(swap! user assoc :user/name (target-value %))}]
+                        :on-change #(swap! user assoc "user/name" (target-value %))}]
            [text-field {:size "small"
                         :id "user-email"
                         :variant "outlined"
                         :label "User email"
-                        :on-change #(swap! user assoc :user/email (target-value %))}]]
+                        :on-change #(swap! user assoc "user/email" (target-value %))}]]
           [dialog-actions
            [button {:variant "outlined"
                     :color "error"
                     :on-click #(rf/dispatch [::rfe/open-user-subscribe-form false])} "Cancel"]
            [button {:variant "contained"
                     :color "success"
-                    :on-click #(.. js/console (log "create user!!!"))} "Ok"]]]]))))
+                    :on-click #(rf/dispatch [::rfe/create-user (merge @user {"user/login" @login
+                                                                             "user/id" (str (cljs.core/random-uuid))})])}
+            "Ok"]]]]))))
 
 
 (defn user-subscribe-alert-dialog []
