@@ -18,3 +18,14 @@
 
 
 
+;; toggle the login slide on drawer menu
+
+(rf/reg-event-db
+ ::toggle-login-slide
+ (fn [db _]
+   (update-in db [:login-form :slide] not)))
+
+(rf/reg-event-db
+ ::set-login-slide
+ (fn [db [_ state]]
+   (assoc-in db [:login-form :slide] state)))

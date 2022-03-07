@@ -39,6 +39,27 @@
 
 
 
+(defn toggle-login-slide
+  "Toggles the login slide"
+  []
+  (rf/dispatch [::dispatch-ui/toggle-login-slide]))
+
+(defn set-login-slide
+  "Sets the login slide to show slide(state=true) or logged-in user(state=false)"
+  [state]
+  (rf/dispatch [::dispatch-ui/set-login-slide state]))
+
+(defn login-slide->login
+  "Show login slide as login"
+  []
+  (set-login-slide true))
+
+(defn login-slide->user
+  "Show login slide as login"
+  []
+  (set-login-slide false))
+
+
 ;;; login events
 ;;
 ;; 0. empty login form
@@ -52,10 +73,6 @@
 
 ;; slide event (1)
 
-(rf/reg-event-db
- ::toggle-login-slide
- (fn [db _]
-   (update-in db [:login-form :slide] not)))
 
 (def base-uri "http://192.168.1.103:8080")
 
