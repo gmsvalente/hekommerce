@@ -4,7 +4,7 @@
 (def node (xt/start-node
            {:xtdb.jdbc/connection-pool
             {:dialect {:xtdb/module 'xtdb.jdbc.psql/->dialect}
-             :db-spec {:host "192.168.1.103"
+             :db-spec {:host "localhost"
                        :port "5432"
                        :dbname "userdb"
                        :user "user"

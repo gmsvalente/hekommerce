@@ -7,7 +7,7 @@
 (defn get-users []
   (let [db (xt/db node)
         users (xt/q db '{:find [n]
-                         :where [[_ :user/name n]]})]
+                         :where [[_ :user/login n]]})]
     (reduce into [] users)))
 
 
