@@ -2,44 +2,41 @@
   (:require [re-frame.core :as rf]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
-            [hekommerce.frontend.theme :refer [custom-theme]]))
+            [hekommerce.frontend.dispatches.db :as dispatch-db]
+            [hekommerce.frontend.dispatches.theme :as dispatch-theme]
+            [hekommerce.frontend.dispatches.ui :as dispatch-ui]))
 
-;;;;; initial db event
-(rf/reg-event-db
- ::init-db
- (fn [_]
-   {:theme custom-theme
-    :drawer {:is-open? false}
-    :login-form {:loading? false
-                 :slide true
-                 :trying nil}
-    :user {:is-logged? false
-           :data nil}
-    :dialogs {:user-subscribe-alert {:open? false}
-              :user-subscribe-form {:open? false}}}))
-
-;;;;; theme events
-;;
-;; helper function
-(defn change-mode [mode]
-  (condp = mode
-    "light" "dark"
-    "dark" "light"))
-
-;; toggle the theme mode dark/light
-(rf/reg-event-fx
- ::toggle-theme-mode
- (fn [{:keys [db]} _]
-   {:db (update-in db [:theme :palette :mode] change-mode )}))
+(defn set-initial-db
+  "Set the initial re-frame app-db"
+  []
+  (rf/dispatch-sync [::dispatch-db/init-db]))
 
 
-;;;;; drawer events
-;;
-;; toggle the drawer menu on/off
-(rf/reg-event-fx
- ::toggle-drawer
- (fn [{:keys [db]} _]
-   {:db (update-in db [:drawer :is-open?] not)}))
+(defn toggle-ui-mode
+  "Changes the dark/light mode of the UI"
+  []
+  (rf/dispatch [::dispatch-theme/toggle-theme-mode]))
+
+(defn toggle-drawer
+  "Toggles the menu drawer"
+  []
+  (rf/dispatch [::dispatch-ui/toggle-drawer]))
+
+(defn set-drawer
+  "Set the menu drawer to state"
+  [state]
+  (rf/dispatch [::dispatch-ui/set-drawer state]))
+
+(defn close-drawer
+  "Close the menu drawer"
+  []
+  (set-drawer false))
+
+(defn open-drawer
+  "Open the menu drawer"
+  []
+  (set-drawer true))
+
 
 
 ;;; login events

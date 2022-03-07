@@ -1,6 +1,5 @@
 (ns hekommerce.frontend.render
   (:require [reagent.dom :refer [render]]
-            [re-frame.core :refer [dispatch-sync]]
             [hekommerce.frontend.events :as rfe]
             [hekommerce.frontend.theme :refer [with-theme]]
             [hekommerce.frontend.components.header :refer [header]]
@@ -21,5 +20,5 @@
   (render root (.. js/document (getElementById "root"))))
 
 (defn init []
-  (dispatch-sync [::rfe/init-db])
+  (rfe/set-initial-db)
   (mount-root))

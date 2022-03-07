@@ -24,7 +24,7 @@
 (defn drawer* [{:keys [class-name]}]
   [drawer {:anchor "right"
            :open @(rf/subscribe [::rfs/drawer-open?])
-           :on-close #(rf/dispatch [::rfe/toggle-drawer])}
+           :on-close rfe/close-drawer}
    [:div {:class class-name}
     [drawer-components]]])
 

@@ -24,9 +24,9 @@
     [toolbar {:class "header"}
      [typography {:class "header-title"} "HEKOMMERCE"]
      [:div {:class "button-box"}
-      [icon-button {:on-click #(rf/dispatch [::rfe/toggle-theme-mode])}
+      [icon-button {:on-click rfe/toggle-ui-mode}
        [@(rf/subscribe [::rfs/theme-mode-btn-icon])]]
-      [icon-button {:on-click #(rf/dispatch [::rfe/toggle-drawer])}
+      [icon-button {:on-click rfe/toggle-drawer}
        [menu]]]]]])
 
 (def header (styled header* custom-style))
