@@ -60,6 +60,8 @@
  (fn [db _]
    (update-in db [:login-form :slide] not)))
 
+(def base-uri "http://192.168.1.103:8080")
+
 ;; fetch event (2)
 (rf/reg-event-fx
  ::fetch-user
@@ -67,7 +69,7 @@
    {:db (assoc-in db [:login-form :trying] login)
     :fx [[:dispatch [::set-login-loading true]]
          [:http-xhrio {:method :get
-                       :uri (str "http://192.168.0.21:8080/api/user/" login)
+                       :uri (str base-uri "/api/user/" login)
                        :format (ajax/json-request-format)
                        :response-format (ajax/json-response-format {:keywords? true})
                        :on-success [::process-result]
@@ -136,7 +138,7 @@
  (fn [{:keys [db]} [_ data]]
    {:fx [[:dispatch [::open-user-subscribe-form false]]
          [:http-xhrio {:method :post
-                       :uri (str "http://192.168.0.21:8080/api/user")
+                       :uri (str base-uri "/api/user")
                        :params data
                        :format (ajax/json-request-format )
                        :response-format (ajax/json-response-format {:keywords? true})
