@@ -38,7 +38,7 @@
         helper-fn  #(when-not (or (empty? @login-user)
                                   (login-ok?))
                       "Wrong login format!")
-        loading? @(rf/subscribe [::rfs/loading-user?])
+        loading? (rf/subscribe [::rfs/loading-user?])
         slide? (rf/subscribe [::rfs/login-form-slide])]
     (fn []
       [:div {:class "login-slide"}
@@ -53,9 +53,8 @@
                       :on-change #(reset! login-user (target-value %))
                       :helperText (helper-fn)}]
          [loading-button {:variant "contained"
-                          :loading loading?
-                          :on-click #(when (login-ok?)
-                                       (rf/dispatch [::rfe/fetch-user @login-user]))}
+                          :loading @loading?
+                          :on-click #(when (login-ok?) (rfe/fetch-user @login-user))}
           [typography {:style {:font-family "Orbitron"}} "Login"]]]]])))
 
 

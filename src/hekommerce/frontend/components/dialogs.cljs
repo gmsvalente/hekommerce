@@ -18,7 +18,7 @@
     (fn []
       (let [user (r/atom {"user/name" "" "user/email" ""})]
         [:div 
-         [dialog {:open @open? :on-close #(rf/dispatch [::rfe/open-user-subscribe-form false])}
+         [dialog {:open @open? :on-close rfe/open-user-subscribe-form}
           [dialog-title "Subscribe"]
           [dialog-content {:style {:display "flex"
                                    :flex-direction "column"
@@ -43,11 +43,12 @@
           [dialog-actions
            [button {:variant "outlined"
                     :color "error"
-                    :on-click #(rf/dispatch [::rfe/open-user-subscribe-form false])} "Cancel"]
+                    :on-click rfe/close-user-subscribe-form}
+            "Cancel"]
            [button {:variant "contained"
                     :color "success"
-                    :on-click #(rf/dispatch [::rfe/create-user (merge @user {"user/login" @login
-                                                                             "user/id" (str (cljs.core/random-uuid))})])}
+                    :on-click #(rfe/create-user (merge @user {"user/login" @login
+                                                                          "user/id" (str (cljs.core/random-uuid))}))}
             "Ok"]]]]))))
 
 
@@ -56,15 +57,20 @@
         open? (rf/subscribe [::rfs/user-subscribe-alert-open?])]
     (fn []
       [:div 
-       [dialog {:open @open? :on-close #(rf/dispatch [::rfe/open-user-subscribe-alert false])}
+       [dialog {:open @open?
+                :on-close rfe/close-user-subscribe-alert}
         [dialog-title {:id "ask-user-creation-dialog"}
          "Create user " [:span {:style {:color "blue"}} @user-login] " ?"]
         [dialog-content
          [dialog-content-text {:id "ask-user-creation-dialog-content"}
           "The user doesn't exist in database. Create new user?"]]
         [dialog-actions
-         [button {:variant "outlined" :color "error"
-                  :on-click #(rf/dispatch [::rfe/open-user-subscribe-alert false])} "Cancel"]
-         [button {:variant "contained" :color "success"
-                  :on-click #(rf/dispatch [::rfe/open-user-subscribe-form true])} "OK"]]]])))
+         [button {:variant "outlined"
+                  :color "error"
+                  :on-click rfe/close-user-subscribe-alert}
+          "Cancel"]
+         [button {:variant "contained"
+                  :color "success"
+                  :on-click rfe/open-user-subscribe-form}
+          "OK"]]]])))
 

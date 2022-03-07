@@ -2,10 +2,6 @@
   (:require [re-frame.core :as rf]))
 
 
-;;;;; menu drawer dispatches
-
-;; toggle the drawer menu on/off
-
 (rf/reg-event-db
  ::toggle-drawer
  (fn [db _]
@@ -17,9 +13,6 @@
    (assoc-in db [:drawer :is-open?] state)))
 
 
-
-;; toggle the login slide on drawer menu
-
 (rf/reg-event-db
  ::toggle-login-slide
  (fn [db _]
@@ -29,3 +22,25 @@
  ::set-login-slide
  (fn [db [_ state]]
    (assoc-in db [:login-form :slide] state)))
+
+
+(rf/reg-event-db
+ ::set-login-loading
+ (fn [db [_ new-state]]
+   (assoc-in db [:login-form :loading?] new-state)))
+
+
+(rf/reg-event-fx
+ ::open-user-subscribe-alert
+ (fn [{:keys [db]} [_ state]]
+   {:db (assoc-in db [:dialogs :user-subscribe-alert :open?] state)
+    :fx [[:dispatch [::set-login-loading false]]]}))
+
+
+(rf/reg-event-fx
+ ::open-user-subscribe-form
+ (fn [{:keys [db]} [_ state]]
+   {:db (assoc-in db [:dialogs :user-subscribe-form :open?] state)
+    :fx [[:dispatch [::open-user-subscribe-alert false]]]}))
+
+
