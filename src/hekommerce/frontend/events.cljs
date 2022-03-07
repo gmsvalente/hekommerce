@@ -104,3 +104,8 @@
   []
   (set-user-subscribe-alert false))
 
+
+(defn logout
+  "Logout the user"
+  []
+  (rf/dispatch [::dispatch-ui/logout-user]))

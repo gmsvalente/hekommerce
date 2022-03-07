@@ -32,6 +32,11 @@
 
 ;;; login
 (rf/reg-sub
+ ::logged?
+ (fn [db]
+   (-> db :user :is-logged?)))
+
+(rf/reg-sub
  ::loading-user?
  (fn [db]
    (-> db :login-form :loading?)))

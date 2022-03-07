@@ -7,6 +7,7 @@
             [reagent-mui.lab.loading-button :refer [loading-button]]
             [reagent-mui.material.text-field :refer [text-field]]
             [reagent-mui.material.slide :refer [slide]]
+            [reagent-mui.material.button :refer [button]]
             [cljs.spec.alpha :as s]
             [hekommerce.frontend.utils :refer [target-value]]
             [hekommerce.common.spec :as model]
@@ -16,21 +17,25 @@
 (defn custom-styles [theme]
   {".login-container" {:position "relative"
                        :height "185px"}
-   ".login-slide" {:position "absolute"
-                   :overflow "hidden"
-                   :left "10%"
-                   :right "10%"}
-   ".user-slide"  {:position "absolute"
-                   :overflow "hidden"
-                   :left "15%"
-                   :right "15%"
-                   :z-index -1}
+   ".slide" {:position "absolute"
+             :overflow "hidden"
+             :left "10%"
+             :right "10%"}
+   ".under" {:z-index -1}
+   ".above" {:z-index 1000}
    ".login-box" {:margin "15px"
                  :height "105px"
                  :display "flex"
                  :flex-direction "column"
                  :justify-content "space-between"
-                 :align-items "center"}})
+                 :align-items "center"}
+   ".user-box" {:margin "15px"
+                :font-family "Orbitron"
+                :display "flex"
+                :flex-direction "column"
+                :justify-content "center"
+                :align-items "center"}
+   ".logout-box" {:margin-top "20px"}})
 
 (defn login-box []
   (let [login-user (r/atom "")
@@ -41,10 +46,10 @@
         loading? (rf/subscribe [::rfs/loading-user?])
         slide? (rf/subscribe [::rfs/login-form-slide])]
     (fn []
-      [:div {:class "login-slide"}
+      [:div.slide {:class (if @slide? "above" "under")}
        [slide {:direction "right"
                :in @slide?}
-        [:div {:class "login-box"}
+        [:div.login-box
          [text-field {:size "small"
                       :id "user-login"
                       :label "User Name"
@@ -53,23 +58,42 @@
                       :on-change #(reset! login-user (target-value %))
                       :helperText (helper-fn)}]
          [loading-button {:variant "contained"
+                          :disabled @(rf/subscribe [::rfs/logged?])
                           :loading @loading?
                           :on-click #(when (login-ok?) (rfe/fetch-user @login-user))}
           [typography {:style {:font-family "Orbitron"}} "Login"]]]]])))
 
 
+(defn user-box-info [{:keys [info ctx]}]
+  [:div {:style {:display "flex"
+                 :align-items "center"}}
+   [typography {:style {:font-family "inherit"
+                        :font-size "10pt"}}
+    (str  info ": ")]
+   [typography {:style {:font-family "inherit"
+                        :font-size "9pt"
+                        :margin-left "5px"}}
+    (str ctx)]])
+
 (defn user-box []
-(let [user  (rf/subscribe [::rfs/user-data])
-      slide? (rf/subscribe [::rfs/login-form-slide])]
-  (fn []
-    (let [{:keys [user/name user/login]} @user]
-      [:div {:class "user-slide"}
-       [slide {:direction "left"
-               :in (not @slide?)}
-        [:div {:class "user-box"}
-         [typography (str "Name: " name)]
-         [typography (str "Login: " login)]
-         [typography (str "Products:  products")]]]]))))
+  (let [user  (rf/subscribe [::rfs/user-data])
+        slide? (rf/subscribe [::rfs/login-form-slide])]
+    (fn []
+      (let [{:keys [user/name user/login user/prod-stats]} @user]
+        [:div.slide {:class (if-not @slide? "above" "under")}
+         [slide {:direction "left"
+                 :in (not @slide?)}
+          [:div.user-box
+           [:div
+            [user-box-info {:info "Login" :ctx login}]
+            [user-box-info {:info "Name" :ctx name}]
+            [user-box-info {:info "Stats" :ctx prod-stats}]]
+           [:div.logout-box
+            [button {:variant "outlined"
+                     :disabled (not @(rf/subscribe [::rfs/logged?]))
+                     :on-click #(rfe/logout)}
+             "logout"]]]]]))))
+
 
 (defn login-container [& children]
   (into [:div {:class "login-container"}] children))

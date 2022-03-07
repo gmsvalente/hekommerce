@@ -4,7 +4,7 @@
             [ajax.core :as ajax]
             [hekommerce.frontend.dispatches.ui :as ui]))
 
-(def base-uri "http://192.168.1.103:8080")
+(def base-uri "http://localhost:8080")
 
 
 (defn get-result-effect [{:keys [user]}]
@@ -25,7 +25,7 @@
  ::process-result
  [check-result]
  (fn [_ [effect result]]
-   {:fx [[:dispatch [effect result]]]}))
+   {:fx [[:dispatch [effect {:user result}]]]}))
 
 
 (rf/reg-event-fx

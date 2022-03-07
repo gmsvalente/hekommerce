@@ -43,4 +43,11 @@
    {:db (assoc-in db [:dialogs :user-subscribe-form :open?] state)
     :fx [[:dispatch [::open-user-subscribe-alert false]]]}))
 
+(rf/reg-event-fx
+ ::logout-user
+ (fn [{:keys [db]}]
+   {:db (-> db
+            (assoc-in [:user :is-logged?] false)
+            (assoc-in [:user :data] nil))
+    :fx [[:dispatch [::toggle-login-slide]]]}))
 
