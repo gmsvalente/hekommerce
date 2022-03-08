@@ -40,6 +40,6 @@
   (reset! server
           (jetty/run-jetty #'routes
                            {:port (Integer/parseInt (or port "8080"))
-                            :host "localhost"
+;                            :host "localhost"
                             :join? (or (:join-server env) false)})))
 
