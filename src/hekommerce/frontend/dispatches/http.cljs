@@ -5,7 +5,7 @@
             [hekommerce.frontend.dispatches.ui :as ui]))
 
 ;(def base-uri "http://localhost:8080")
-(def base-uri "https://hekommerce-staging.herokuapp.com/")
+(def base-uri "https://hekommerce-staging.herokuapp.com")
 
 (defn get-result-effect [{:keys [user]}]
   (if-not (nil? user)
