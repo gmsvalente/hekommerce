@@ -1,8 +1,8 @@
-(ns hekommerce.frontend.dispatches.http
+(ns hekommerce.frontend.events.http
   (:require [re-frame.core :as rf]
             [day8.re-frame.http-fx]
             [ajax.core :as ajax]
-            [hekommerce.frontend.dispatches.ui :as ui]))
+            [hekommerce.frontend.events.ui :as ui]))
 
 (defn get-result-effect
   "Return ths dispatch key and data"

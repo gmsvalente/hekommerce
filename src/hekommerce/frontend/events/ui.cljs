@@ -1,4 +1,4 @@
-(ns hekommerce.frontend.dispatches.ui
+(ns hekommerce.frontend.events.ui
   (:require [re-frame.core :as rf]))
 
 

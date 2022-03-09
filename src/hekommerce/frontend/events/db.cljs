@@ -1,4 +1,4 @@
-(ns hekommerce.frontend.dispatches.db
+(ns hekommerce.frontend.events.db
   (:require [re-frame.core :as rf ]
             [hekommerce.frontend.theme :refer [custom-theme]]))
 
