@@ -1,8 +1,7 @@
 (ns hekommerce.backend.routes
-  (:require [hekommerce.backend.handlers :as h]
-            [reitit.ring :as ring]
+  (:require [reitit.ring :as ring]
+            [hekommerce.backend.handlers :as h]
             [hekommerce.common.spec :as model]))
-
 
 (def root-route
   ["/" {:name ::land-page

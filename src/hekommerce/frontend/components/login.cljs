@@ -37,7 +37,9 @@
                 :align-items "center"}
    ".logout-box" {:margin-top "20px"}})
 
-(defn login-box []
+(defn login-box
+  "Component for login"
+  []
   (let [login-user (r/atom "")
         login-ok? #(s/valid? ::model/login @login-user)
         helper-fn  #(when-not (or (empty? @login-user)
@@ -45,6 +47,7 @@
                       "Wrong login format!")
         loading? (rf/subscribe [::rfs/loading-user?])
         slide? (rf/subscribe [::rfs/login-form-slide])]
+
     (fn []
       [:div.slide {:class (if @slide? "above" "under")}
        [slide {:direction "right"

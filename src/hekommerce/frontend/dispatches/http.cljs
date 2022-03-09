@@ -4,28 +4,27 @@
             [ajax.core :as ajax]
             [hekommerce.frontend.dispatches.ui :as ui]))
 
-;(def base-uri "http://localhost:8080")
-(def base-uri "https://hekommerce-staging.herokuapp.com")
-
-(defn get-result-effect [{:keys [user]}]
+(defn get-result-effect
+  "Return ths dispatch key and data"
+  [{:keys [user]}]
   (if-not (nil? user)
-    [::success-login user]
+    [::success-login {:user user}]
     [::ui/open-user-subscribe-alert true]))
-
 
 (def check-result
   (rf/->interceptor
    :id :check-result
-   :before (fn [ctx]
-             (let [[_ result] (-> ctx :coeffects :event)
-                   [id effect-result] (get-result-effect (js->clj result :keywordize-keys true))]
-               (assoc-in ctx [:coeffects :event] [id effect-result])))))
+   :before
+   (fn [{:keys [coeffects] :as ctx}]
+     (let [[_ result] (:event coeffects)
+           [id effect-result] (get-result-effect (js->clj result :keywordize-keys true))]
+       (assoc-in ctx [:coeffects :event] [id effect-result])))))
 
 (rf/reg-event-fx
  ::process-result
  [check-result]
  (fn [_ [effect result]]
-   {:fx [[:dispatch [effect {:user result}]]]}))
+   {:fx [[:dispatch [effect result]]]}))
 
 
 (rf/reg-event-fx
@@ -40,11 +39,11 @@
 
 (rf/reg-event-fx
  ::fetch-user
- (fn [{:keys [db]} [_ login]]
-   {:db (assoc-in db [:login-form :trying] login)
+ (fn [{:keys [db]} [_ user]]
+   {:db (assoc-in db [:login-form :trying] user)
     :fx [[:dispatch [::ui/set-login-loading true]]
          [:http-xhrio {:method :get
-                       :uri (str base-uri "/api/user/" login)
+                       :uri (str "/api/user/" user)
                        :format (ajax/json-request-format)
                        :response-format (ajax/json-response-format {:keywords? true})
                        :on-success [::process-result]
@@ -56,7 +55,7 @@
  (fn [{:keys [db]} [_ data]]
    {:fx [[:dispatch [::ui/open-user-subscribe-form false]]
          [:http-xhrio {:method :post
-                       :uri (str base-uri "/api/user")
+                       :uri "/api/user"
                        :params data
                        :format (ajax/json-request-format )
                        :response-format (ajax/json-response-format {:keywords? true})

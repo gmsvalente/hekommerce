@@ -2,11 +2,11 @@
   (:require [hekommerce.backend.pages :refer [land-page]]
             [hekommerce.backend.api :as api]))
 
-(defn page-handler [req]
+(defn page-handler [_]
   {:status 200
    :body (land-page)})
 
-(defn all-users [req]
+(defn all-users [_]
   (let [users (api/get-users)]
     {:status 200
      :body {:users users}}))
