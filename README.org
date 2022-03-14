@@ -3,13 +3,40 @@
   It's a WIP!!! So errors and incomplete usability is expected!
 ** Stack
 *** Clojure
-**** spec
-**** XTDB with postgresql
-**** hiccup
-**** ring
+    - spec
+    - XTDB with postgresql
+    - hiccup
+    - ring
 *** Clojurescript
-**** reagent
-**** re-frame
+    - shadow-cljs
+    - reagent
+    - re-frame
 ** USAGE
-   You must have a postgresql installed.
+
+   You need clojure, clojurescript and shadow-cljs installed.
+   - https://clojure.org
+   - https://clojurescript.org
+   - https://github.com/thheller/shadow-cljs
+     
+
+   To run in your localhost, you must have a postgresql installed.
+   Or you can use a docker image.
+   #+begin_src shell :eval never
+   docker pull postgres
+   docker run --name container-name -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=userdb -p 5432:5432 -d postgres
+   #+end_src
+
+   If you use other configuration for host, port, username, password and db you must set an JDBC_DATABASE_URL env variable.
+   #+begin_src shell :eval never
+   JDBC_DATABASE_URL=jdbc:postgresql://{host}:{port}/{dbname}?password={password}&user={user}
+   #+end_src
    
+   Clone the repo and run:
+   #+begin_src shell :eval never
+   git clone https://github.com/gmsvalente/hekommerce.git
+   cd hekommerce
+   shadow-cljs release :hekommerce 
+   clojure -M:run-server $PORT
+   #+end_src
+
+
