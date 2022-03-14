@@ -56,7 +56,9 @@
    #+end_src
 * TODOS
   - [ ] TESTS
+  - [ ] Improve specs validations and parsing
   - [ ] Add products api
-  - [ ] use webStorage
+  - [ ] Add js/webStorage
+  - [ ] Add integrant
 
 
