@@ -1,12 +1,17 @@
 * A heroku ecommerce demo
   This is a ecommerce demo using heroku!
-  It's a **WIP**. So errors and incomplete usability is expected!
+
+  It's a *WIP*.
+
+  So errors and incomplete usability is expected!
+
 ** Stack
 *** Clojure
     - spec
     - XTDB with postgresql
     - hiccup
     - ring
+    - reitit
 *** Clojurescript
     - shadow-cljs
     - reagent
@@ -49,5 +54,9 @@
    shadow-cljs release :hekommerce 
    clojure -M:run-server $PORT
    #+end_src
+* TODOS
+  - [ ] TESTS
+  - [ ] Add products api
+  - [ ] use webStorage
 
 
