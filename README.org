@@ -1,6 +1,6 @@
 * A heroku ecommerce demo
   This is a ecommerce demo using heroku!
-  It's a WIP!!! So errors and incomplete usability is expected!
+  It's a **WIP**. So errors and incomplete usability is expected!
 ** Stack
 *** Clojure
     - spec
@@ -28,19 +28,24 @@
 
    If you use other configuration for host, port, username, password and db you must set an JDBC_DATABASE_URL env variable.
    #+begin_src shell :eval never
-   POSTGRES_USER=<psql user name>
-   POSTGRES_HOST=<psql host address>
-   POSTGRES_PORT=<psql port number>
-   POSTGRES_PASSWORD=<psql password>
-   POSTGRES_DB=<psql db name>
+   export POSTGRES_USER=<psql user name>
+   export POSTGRES_HOST=<psql host address>
+   export POSTGRES_PASSWORD=<psql password>
+   export POSTGRES_DB=<psql db name>
 
-   JDBC_DATABASE_URL=jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB?password=$POSTGRES_PASSWORD&user=$POSTGRES_USER
+   export JDBC_DATABASE_URL="jdbc:postgresql://$POSTGRES_HOST:5432/$POSTGRES_DB?password=$POSTGRES_PASSWORD&user=$POSTGRES_USER"
    #+end_src
    
+   Set web port:
+   #+begin_src shell :eval never
+   export PORT=<port number>
+   #+end_src
+
    Clone the repo and run:
    #+begin_src shell :eval never
    git clone https://github.com/gmsvalente/hekommerce.git
    cd hekommerce
+   npm install
    shadow-cljs release :hekommerce 
    clojure -M:run-server $PORT
    #+end_src
