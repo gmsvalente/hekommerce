@@ -5,6 +5,10 @@
 
   Errors and incomplete usability is expected!
 
+  Check live:
+#+html: <a href="https://hekommerce.herokuapp.com"></a>
+  *(it is a free dyno so warmup time is huge!)*
+  
 ** Stack
 *** Clojure
     - spec
